@@ -13,9 +13,19 @@ public class Driver {
 		//Main Frame
 		JFrame frame = new JFrame("Vehicle Agency");		
 		
+
+		
 		//Panels
 		Vehicle_Adding_Class vehicle_adding = new Vehicle_Adding_Class();
 		Main_Menu main_menu = new Main_Menu();
+		
+		Thread v_adding = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				
+			}
+		});
 		
 		//frame initialization
 		frame.add(main_menu, BorderLayout.CENTER);
