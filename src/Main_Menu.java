@@ -9,7 +9,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import javax.swing.*;
 
-public class Main_Menu extends JPanel implements ActionListener{
+public class Main_Menu extends JPanel implements ActionListener, Runnable{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -323,5 +323,15 @@ public class Main_Menu extends JPanel implements ActionListener{
 	public JButton getReport()
 	{
 		return get_report;
+	}
+	@Override
+	public void run() {
+		JFrame agency_frame = new JFrame("Vehicle Agency");	
+		agency_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		agency_frame.setSize(820, 600);
+		agency_frame.setResizable(false);
+		agency_frame.setVisible(true);
+		agency_frame.add(this);
+
 	}
 }

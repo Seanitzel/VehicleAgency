@@ -3,7 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-class Vehicle_Adding_Class extends JPanel implements ActionListener {
+class Vehicle_Adding_Class extends JPanel implements ActionListener, Runnable {
 
 	static final private long serialVersionUID = 1L;
 
@@ -78,8 +78,8 @@ class Vehicle_Adding_Class extends JPanel implements ActionListener {
 	private JComboBox<ImageIcon> vehicle_images_combo = new JComboBox<ImageIcon>();
 
 	//Buttons
-	private JButton continue_btn = new JButton("Continue ->");
-	private JButton add_vehicle_btn = new JButton("Add Vehicle");
+	private JButton continue_btn = new JButton("Add Vehicles!");
+	private JButton add_vehicle_btn = new JButton("OK");
 	private JButton load_img_btn = new JButton("Load Image");
 	private JButton back_btn = new JButton("Back");
 	private JButton Frigate_btn = new JButton("Frigate");
@@ -368,5 +368,16 @@ class Vehicle_Adding_Class extends JPanel implements ActionListener {
 	public JButton GOTO_agency()//function to manage window switching with main agency menu
 	{
 		return continue_btn;
+	}
+
+	@Override
+	public void run() {
+		JFrame agency_frame = new JFrame("Add Vehicles");	
+		agency_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		agency_frame.setSize(820, 600);
+		agency_frame.setResizable(false);
+		agency_frame.setVisible(true);
+		agency_frame.add(this);
+
 	}
 }
