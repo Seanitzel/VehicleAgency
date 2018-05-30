@@ -7,6 +7,8 @@ class Vehicle_Adding_Class extends JPanel implements ActionListener, Runnable {
 
 	static final private long serialVersionUID = 1L;
 
+	JFrame agency_frame = new JFrame("Add Vehicles");	
+	
 	//data structures
 	ArrayList<T_Vehicle> vehicles = new ArrayList<T_Vehicle>();		//Agency vehicle Array
 	ArrayList<Water_V> w_vehicles = new ArrayList<Water_V>();		//agency ship vehicle Array
@@ -372,7 +374,6 @@ class Vehicle_Adding_Class extends JPanel implements ActionListener, Runnable {
 
 	@Override
 	public void run() {
-		JFrame agency_frame = new JFrame("Add Vehicles");	
 		agency_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		agency_frame.setSize(820, 600);
 		agency_frame.setResizable(false);

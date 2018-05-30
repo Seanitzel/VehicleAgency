@@ -13,26 +13,15 @@ public class Driver {
 		//Panels
 		Vehicle_Adding_Class vehicle_adding = new Vehicle_Adding_Class();
 		Main_Menu main_menu = new Main_Menu();
+		FlagChange flag_change = new FlagChange();
 		
 		Thread vehicle_adding_thread = new Thread((Runnable) vehicle_adding);
 		Thread main_menu_thread = new Thread((Runnable) main_menu);
+		Thread flag_change_thread = new Thread((Runnable) flag_change);
+
 		main_menu_thread.start();
 		vehicle_adding_thread.start();
-		//v_adding_frame initialization
-//		agency_frame.add(main_menu, BorderLayout.CENTER);
-//		v_adding_frame.add(vehicle_adding, BorderLayout.CENTER);
 
-//		v_adding_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		v_adding_frame.setSize(820, 600);
-//		v_adding_frame.setResizable(false);
-//		v_adding_frame.setVisible(true);
-		
-//		agency_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		agency_frame.setSize(820, 600);
-//		agency_frame.setResizable(false);
-//		agency_frame.setVisible(false);
-		
-		//Handeling Panel Switching
 		vehicle_adding.GOTO_agency().addActionListener(new ActionListener() {
 			
 			@Override
@@ -56,9 +45,16 @@ public class Driver {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				vehicle_adding_thread.stop();
-				main_menu_thread.stop();
+				
 			}
 		});
+		main_menu.ChangeFlag().addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				flag_change_thread.start();
+			}
+		});
+		
 	}
 }

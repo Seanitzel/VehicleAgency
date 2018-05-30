@@ -13,6 +13,8 @@ public class Main_Menu extends JPanel implements ActionListener, Runnable{
 
 	private static final long serialVersionUID = 1L;
 	
+	JFrame agency_frame = new JFrame("Vehicle Agency");	
+	
 	static final int NUM_OF_FLAGS = 7;
 	
 	//data structures
@@ -22,6 +24,9 @@ public class Main_Menu extends JPanel implements ActionListener, Runnable{
 	//Panels
 	private JPanel main_menu_panel = new JPanel();
 	private JPanel flag_change_panel = new JPanel();	
+	
+	FlagChange flag_change_window = new FlagChange();
+	//Thread flag_change_thread = new Thread((Runnable) flag_change_panel);
 	
 	//Combo Box
 	private JComboBox<ImageIcon> flags = new JComboBox<ImageIcon>();
@@ -264,40 +269,37 @@ public class Main_Menu extends JPanel implements ActionListener, Runnable{
 		}
 		if(e.getSource() == flag_change_btn)
 		{
-			main_menu_panel.setVisible(false);
-			flag_change_panel.setVisible(true);
-//			repaint();
-			add(flag_change_panel, BorderLayout.CENTER);
+			//flag_change_thread.start();
 		}
-		if(e.getSource() == flag_choose_btn)
-		{
-			String flag = null;
-			if(flags.getSelectedItem().toString().contains("f1"))
-				flag = "Israel";
-			if(flags.getSelectedItem().toString().contains("f2"))
-				flag = "Germany";
-			if(flags.getSelectedItem().toString().contains("f3"))
-				flag = "USA";
-			if(flags.getSelectedItem().toString().contains("f4"))
-				flag = "Italy";
-			if(flags.getSelectedItem().toString().contains("f5"))
-				flag = "Greece";
-			if(flags.getSelectedItem().toString().contains("f6"))
-				flag = "PIRATE";
-			if(flags.getSelectedItem().toString().contains("f7"))
-				flag = "Sumalia";
-			for(int i=0;i<w_vehicles.size();i++)
-				w_vehicles.get(i).setFlag(flag);
-			flag_change_panel.setVisible(false);
-			main_menu_panel.setVisible(true);
-			add(main_menu_panel, BorderLayout.CENTER);
-		}
-		if(e.getSource() == back_flag_choose_btn)
-		{
-			flag_change_panel.setVisible(false);
-			main_menu_panel.setVisible(true);
-			add(main_menu_panel, BorderLayout.CENTER);
-		}
+//		if(e.getSource() == flag_choose_btn)
+//		{
+//			String flag = null;
+//			if(flags.getSelectedItem().toString().contains("f1"))
+//				flag = "Israel";
+//			if(flags.getSelectedItem().toString().contains("f2"))
+//				flag = "Germany";
+//			if(flags.getSelectedItem().toString().contains("f3"))
+//				flag = "USA";
+//			if(flags.getSelectedItem().toString().contains("f4"))
+//				flag = "Italy";
+//			if(flags.getSelectedItem().toString().contains("f5"))
+//				flag = "Greece";
+//			if(flags.getSelectedItem().toString().contains("f6"))
+//				flag = "PIRATE";
+//			if(flags.getSelectedItem().toString().contains("f7"))
+//				flag = "Sumalia";
+//			for(int i=0;i<w_vehicles.size();i++)
+//				w_vehicles.get(i).setFlag(flag);
+//			flag_change_panel.setVisible(false);
+//			main_menu_panel.setVisible(true);
+//			add(main_menu_panel, BorderLayout.CENTER);
+//		}
+//		if(e.getSource() == back_flag_choose_btn)
+//		{
+//			flag_change_panel.setVisible(false);
+//			main_menu_panel.setVisible(true);
+//			add(main_menu_panel, BorderLayout.CENTER);
+//		}
 	}
 	private void add_elements(JPanel panel, JComponent[] cmps)//add components to panel
 	{
@@ -324,9 +326,14 @@ public class Main_Menu extends JPanel implements ActionListener, Runnable{
 	{
 		return get_report;
 	}
+	
+	public JButton ChangeFlag()
+	{
+		return flag_change_btn;
+	}
+	
 	@Override
 	public void run() {
-		JFrame agency_frame = new JFrame("Vehicle Agency");	
 		agency_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		agency_frame.setSize(820, 600);
 		agency_frame.setResizable(false);
