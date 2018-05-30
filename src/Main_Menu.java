@@ -15,6 +15,8 @@ public class Main_Menu extends JPanel implements ActionListener, Runnable{
 	
 	static final int NUM_OF_FLAGS = 7;
 	
+	JFrame agency_frame = new JFrame("Vehicle Agency");
+	
 	//data structures
 	private ArrayList<T_Vehicle> vehicles = new ArrayList<T_Vehicle>();		//Agency vehicle Array
 	private ArrayList<Water_V> w_vehicles = new ArrayList<Water_V>();		//agency ship vehicle Array
@@ -66,6 +68,7 @@ public class Main_Menu extends JPanel implements ActionListener, Runnable{
 		flag_choose_btn.addActionListener(this);
 		back_flag_choose_btn.addActionListener(this);
 		get_report.addActionListener(this);
+		exit_btn.addActionListener(this);
 
 		//setting up flag images sources
 		for(int i=1;i<NUM_OF_FLAGS + 1;i++)
@@ -217,6 +220,10 @@ public class Main_Menu extends JPanel implements ActionListener, Runnable{
 	@Override
 	public void actionPerformed(ActionEvent e)//handle btn clicks
 	{
+		if(e.getSource() == exit_btn)
+		{
+			agency_frame.dispose();
+		}
 		if(e.getSource() == get_report)
 		{
 			//Main Frame
@@ -325,8 +332,7 @@ public class Main_Menu extends JPanel implements ActionListener, Runnable{
 		return get_report;
 	}
 	@Override
-	public void run() {
-		JFrame agency_frame = new JFrame("Vehicle Agency");	
+	public void run() {	
 		agency_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		agency_frame.setSize(820, 600);
 		agency_frame.setResizable(false);
