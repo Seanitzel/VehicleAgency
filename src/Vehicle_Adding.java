@@ -3,12 +3,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-class Vehicle_Adding_Class extends JPanel implements ActionListener, Runnable {
+class Vehicle_Adding extends myPanel implements ActionListener, Runnable {
 
-	static final private long serialVersionUID = 1L;
-
-	JFrame agency_frame = new JFrame("Add Vehicles");	
-	
+	static final private long serialVersionUID = 1L;	
+		
 	//data structures
 	ArrayList<T_Vehicle> vehicles = new ArrayList<T_Vehicle>();		//Agency vehicle Array
 	ArrayList<Water_V> w_vehicles = new ArrayList<Water_V>();		//agency ship vehicle Array
@@ -95,7 +93,6 @@ class Vehicle_Adding_Class extends JPanel implements ActionListener, Runnable {
 	private ImageIcon bg_img = new ImageIcon("Images\\bg.jpg");
 
 	//Labels
-	private JLabel[] vehicle_label_fields;
 	private JLabel title_lab = new JLabel("Hey! Please Choose Your Vehicles:");
 	private JLabel model_lab = new JLabel("Model:");
 	private JLabel max_passengers_lab = new JLabel("Max Passengers:");
@@ -115,8 +112,10 @@ class Vehicle_Adding_Class extends JPanel implements ActionListener, Runnable {
 	//file chooser
 	private final JFileChooser fc = new JFileChooser();
 
-	public Vehicle_Adding_Class()
+	public Vehicle_Adding()
 	{
+		super();
+		frame = new JFrame("Vehicle Shop");
 		//btn action listener adding
 		continue_btn.addActionListener(this);
 		load_img_btn.addActionListener(this);
@@ -195,10 +194,7 @@ class Vehicle_Adding_Class extends JPanel implements ActionListener, Runnable {
 		}
 		if(e.getSource() == add_vehicle_btn)
 		{
-			if(vehicles.size() > MAX_NUM_OF_VEHICLES)//max of 30 vehicles in company
-				JOptionPane.showMessageDialog(null, "Max number of Vehicles in Agency Reached!\n Sell Some Vehicles to add more...");
-			else
-			{
+			
 				T_Vehicle v = null;
 				if(pick == "jeep")
 				{
@@ -239,7 +235,7 @@ class Vehicle_Adding_Class extends JPanel implements ActionListener, Runnable {
 				vehicles.add(v);
 				onLeaving_Vehicle_Adding_Menu();
 				continue_btn.setEnabled(true);
-			}
+			
 		}
 		if(e.getSource() == jeep_btn)
 		{
@@ -344,7 +340,7 @@ class Vehicle_Adding_Class extends JPanel implements ActionListener, Runnable {
 	{
 		for(int i=0;i<length;i++)
 		{
-			vehicle_textfields[i] = new JTextField();
+			vehicle_textfields[i] = new JTextField("1");
 			vehicle_label_fields[i].setPreferredSize(new Dimension(200, 40));
 			vehicle_textfields[i].setPreferredSize(new Dimension(160, 40));
 			vehicle_label_fields[i].setFont(new Font("Courier", Font.BOLD,20));
@@ -353,11 +349,6 @@ class Vehicle_Adding_Class extends JPanel implements ActionListener, Runnable {
 		}
 		for(int i=0;i<NUM_OF_IMGS_PER_VEHICLE;i++)
 			vehicle_images_combo.addItem(images[img_index][i]);
-	}
-	private void add_elements(JPanel panel, JComponent[] cmps)//add array of elements to panel 
-	{
-		for(int i=0;i<cmps.length;i++)
-			panel.add(cmps[i]);
 	}
 	public ArrayList<T_Vehicle> getVehicles()//function to send to main agency menu the vehicles array 
 	{
@@ -374,11 +365,13 @@ class Vehicle_Adding_Class extends JPanel implements ActionListener, Runnable {
 
 	@Override
 	public void run() {
-		agency_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		agency_frame.setSize(820, 600);
-		agency_frame.setResizable(false);
-		agency_frame.setVisible(true);
-		agency_frame.add(this);
-
+		makeFrame(820, 600);
+		frame.setLocation(820, 0);
+	}
+	
+	public void exit()
+	{
+		frame.dispose();
+		alive = false;
 	}
 }

@@ -1,5 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -9,13 +11,9 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import javax.swing.*;
 
-public class Main_Menu extends JPanel implements ActionListener, Runnable{
+public class Main_Menu extends myPanel implements ActionListener, Runnable{
 
 	private static final long serialVersionUID = 1L;
-	
-	JFrame agency_frame = new JFrame("Vehicle Agency");	
-	
-	static final int NUM_OF_FLAGS = 7;
 	
 	//data structures
 	private ArrayList<T_Vehicle> vehicles = new ArrayList<T_Vehicle>();		//Agency vehicle Array
@@ -23,16 +21,10 @@ public class Main_Menu extends JPanel implements ActionListener, Runnable{
 	
 	//Panels
 	private JPanel main_menu_panel = new JPanel();
-	private JPanel flag_change_panel = new JPanel();	
-	
-	FlagChange flag_change_window = new FlagChange();
-	//Thread flag_change_thread = new Thread((Runnable) flag_change_panel);
-	
-	//Combo Box
-	private JComboBox<ImageIcon> flags = new JComboBox<ImageIcon>();
-	
-	//flag image array
-	private ImageIcon[] flag_images = new ImageIcon[NUM_OF_FLAGS];
+	private JPanel vehicles_panel = new JPanel();
+	private JPanel scroll_pane_container = new JPanel();	
+		
+	private JScrollPane scroll_pane;
 	
 	//labels
 	private JLabel title_lbl = new JLabel("Welcome To the Best Vehicle Agency Ever!");
@@ -40,8 +32,9 @@ public class Main_Menu extends JPanel implements ActionListener, Runnable{
 	private JLabel vehicle_info = new JLabel();
 	private JLabel pick_title_lbl = new JLabel("<html>"+ "Chosen Vehicle:" +"</html>");
 	private JLabel pick_lbl = new JLabel();
-	private JLabel choose_flag_lbl = new JLabel("Choose Desired Flag!");
-	private JLabel[] vehicle_lbls;
+	private JLabel[] vehicle_lbls = null;
+	
+	//JScrollPane vehicle_scroll_pane = new JScrollPane();
 	
 	//buttons
 	private JButton add_vehicles_btn = new JButton("<html>"+ "Add Vehicles" +"</html>");
@@ -49,8 +42,6 @@ public class Main_Menu extends JPanel implements ActionListener, Runnable{
 	private JButton test_drive_btn = new JButton("<html>"+ "Test Drive" +"</html>");
 	private JButton reset_distance_btn = new JButton("<html>"+ "Reset Distances" +"</html>");
 	private JButton flag_change_btn = new JButton("<html>"+ "Change Flags" +"</html>");
-	private JButton flag_choose_btn = new JButton("Choose");
-	private JButton back_flag_choose_btn = new JButton("Back");
 	private JButton exit_btn = new JButton("Exit");
 	private JButton get_report = new JButton("Get Full Report");
 	
@@ -62,19 +53,19 @@ public class Main_Menu extends JPanel implements ActionListener, Runnable{
 	
 	public Main_Menu()
 	{		
+//		Glider_Game gg = new Glider_Game();
+//		gg.setImageSource("Images\\GameGlider\\g1.jpg");
+//		for(int i=0;i<20;i++)
+//			vehicles.add(gg);
+		
+		frame = new JFrame("Vehicle Agency");
 		//adding action listeners to btns
 		add_vehicles_btn.addActionListener(this);
 		buy_btn.addActionListener(this);
 		reset_distance_btn.addActionListener(this);
 		test_drive_btn.addActionListener(this);
 		flag_change_btn.addActionListener(this);
-		flag_choose_btn.addActionListener(this);
-		back_flag_choose_btn.addActionListener(this);
 		get_report.addActionListener(this);
-
-		//setting up flag images sources
-		for(int i=1;i<NUM_OF_FLAGS + 1;i++)
-			flag_images[i-1] = new ImageIcon("Images\\Flags\\f" + i + ".jpg");
 		
 		//setting up the mouse listener
 		mouse_listener = new MouseListener() {
@@ -82,7 +73,6 @@ public class Main_Menu extends JPanel implements ActionListener, Runnable{
 			@Override
 			public void mousePressed(MouseEvent e) {
 
-				
 			}
 			
 			@Override
@@ -125,16 +115,18 @@ public class Main_Menu extends JPanel implements ActionListener, Runnable{
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
+
 			}
 		};
 		
 		//setting up panels
 		main_menu_panel.setLayout(null);
 		main_menu_panel.setBackground(Color.YELLOW);
-		flag_change_panel.setLayout(null);		
-		flag_change_panel.setBackground(Color.CYAN);
+		
+		vehicles_panel.setLayout(new FlowLayout());
+		vehicles_panel.setBackground(Color.YELLOW);
+		
+		scroll_pane_container.setLayout(new FlowLayout());
 		
 		//setting up class details
 		setSize(1280,980);
@@ -167,79 +159,56 @@ public class Main_Menu extends JPanel implements ActionListener, Runnable{
 		reset_distance_btn.setFont(new Font("Courier", Font.BOLD,18));
 		flag_change_btn.setFont(new Font("Courier", Font.BOLD,18));
 		add_vehicles_btn.setFont(new Font("Courier", Font.BOLD,18));
-
-		
-		
-		for(int i=0;i<NUM_OF_FLAGS;i++)
-			flags.addItem(flag_images[i]);
-		
-		back_flag_choose_btn.setBounds(600, 200, 100, 220);
-		flag_choose_btn.setBounds(450, 200, 100, 220);
-		flags.setBounds(100,200,300,220);
-		choose_flag_lbl.setBounds(180, -50, 600, 200);
-		choose_flag_lbl.setFont(new Font("Courier", Font.BOLD,36));
-		JComponent[] flag_choose_elements = {flag_choose_btn, flags, back_flag_choose_btn, choose_flag_lbl};
-		add_elements(flag_change_panel, flag_choose_elements);
 		
 		buy_btn.setEnabled(false);
 		test_drive_btn.setEnabled(false);
+		
+//		vehicle_scroll_pane.setBounds(0, 80, 800, 240);
+//		vehicle_scroll_pane.setBackground(Color.cyan);
+		
+		scroll_pane = new JScrollPane(vehicles_panel);
+		
+		vehicles_panel.setPreferredSize(new Dimension(720, (vehicles.size() * 120)/9));
 
-		JComponent[] main_menu_elements = {choose_vehicle_lbl, vehicle_info, title_lbl, buy_btn, test_drive_btn
-											,reset_distance_btn, flag_change_btn,add_vehicles_btn, exit_btn, pick_lbl,pick_title_lbl, get_report};
+		scroll_pane.setPreferredSize(new Dimension(800, 240));
+		
+		scroll_pane_container.add(scroll_pane);
+		scroll_pane_container.setBounds(0,80,800,240);
+		
+		JComponent[] main_menu_elements = {choose_vehicle_lbl, vehicle_info, title_lbl, buy_btn, test_drive_btn, reset_distance_btn
+											, flag_change_btn,add_vehicles_btn, exit_btn, pick_lbl,pick_title_lbl, get_report,scroll_pane_container};
 		add_elements(main_menu_panel, main_menu_elements);
 		//----------------------------------------------------------------------------------------------------------------
 		
 		//adding panels to class
-		add(flag_change_panel, BorderLayout.CENTER);
 		add(main_menu_panel, BorderLayout.CENTER);
+		
+		update_vehicles_imgs();
 	}
 	public void update_vehicles_imgs()//update the vehicle imgs every time a new vehicle is added via the vehicle adding panel
 	{
 		if(vehicle_lbls != null)
 		for(int i=0;i<vehicle_lbls.length;i++)
 		{
-			main_menu_panel.remove(vehicle_lbls[i]);
+			vehicles_panel.remove(vehicle_lbls[i]);
 		}
-			vehicle_lbls = new JLabel[vehicles.size()];
+		vehicle_lbls = new JLabel[vehicles.size()];
 		for(int i=0;i<vehicle_lbls.length;i++)
 		{
 			ImageIcon img = new ImageIcon(vehicles.get(i).getImageSource());
 			Image newimg = img.getImage();
 			newimg = newimg.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-			img = new ImageIcon(newimg);
+			img = new ImageIcon(newimg);			
 			vehicle_lbls[i] = new JLabel(img);
 			vehicle_lbls[i].addMouseListener(mouse_listener);
-			vehicle_lbls[i].setBorder(BorderFactory.createDashedBorder(Color.BLACK));           
-			if(i < 10)
-				vehicle_lbls[i].setBounds(0 + i * 80,100,80,80);
-			else if(i < 20)
-				vehicle_lbls[i].setBounds(0 + i%10 * 80,180,80,80);
-			else
-				vehicle_lbls[i].setBounds(0 + i%10 * 80,260,80,80);
-			main_menu_panel.add(vehicle_lbls[i]);
+			vehicle_lbls[i].setBorder(BorderFactory.createDashedBorder(Color.BLACK));         
+			vehicles_panel.add(vehicle_lbls[i]);
 		}
+		vehicle_info.setText(null);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e)//handle btn clicks
 	{
-		if(e.getSource() == get_report)
-		{
-			//Main Frame
-			JFrame frame = new JFrame("Vehicle Agency");		
-			
-			//Panels
-			Vehicle_Adding_Class vehicle_adding = new Vehicle_Adding_Class();
-			Main_Menu main_menu = new Main_Menu();
-			
-			//frame initialization
-			frame.add(main_menu, BorderLayout.CENTER);
-			frame.add(vehicle_adding, BorderLayout.CENTER);
-			main_menu.setVisible(false);
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame.setSize(820, 600);
-			frame.setResizable(false);
-			frame.setVisible(true);
-		}
 		if(e.getSource() == buy_btn)
 		{
 			vehicles.remove(pick);
@@ -254,12 +223,6 @@ public class Main_Menu extends JPanel implements ActionListener, Runnable{
 			pick_lbl.setIcon(null);
 			repaint();
 		}
-		if(e.getSource() == test_drive_btn)
-		{
-			String distance = JOptionPane.showInputDialog(null, "How Much Distance Have You Traveled?");
-			vehicles.get(pick).Travel_Distance(Integer.parseInt(distance));
-			vehicle_info.setText("<html>"+ vehicles.get(pick).toString() +"</html>");
-		}
 		if(e.getSource() == reset_distance_btn)
 		{
 			for(int i = 0; i < vehicles.size();i++)
@@ -267,56 +230,28 @@ public class Main_Menu extends JPanel implements ActionListener, Runnable{
 			vehicle_info.setText(null);
 			JOptionPane.showMessageDialog(null, "Reset Successfull!");
 		}
-		if(e.getSource() == flag_change_btn)
-		{
-			//flag_change_thread.start();
-		}
-//		if(e.getSource() == flag_choose_btn)
-//		{
-//			String flag = null;
-//			if(flags.getSelectedItem().toString().contains("f1"))
-//				flag = "Israel";
-//			if(flags.getSelectedItem().toString().contains("f2"))
-//				flag = "Germany";
-//			if(flags.getSelectedItem().toString().contains("f3"))
-//				flag = "USA";
-//			if(flags.getSelectedItem().toString().contains("f4"))
-//				flag = "Italy";
-//			if(flags.getSelectedItem().toString().contains("f5"))
-//				flag = "Greece";
-//			if(flags.getSelectedItem().toString().contains("f6"))
-//				flag = "PIRATE";
-//			if(flags.getSelectedItem().toString().contains("f7"))
-//				flag = "Sumalia";
-//			for(int i=0;i<w_vehicles.size();i++)
-//				w_vehicles.get(i).setFlag(flag);
-//			flag_change_panel.setVisible(false);
-//			main_menu_panel.setVisible(true);
-//			add(main_menu_panel, BorderLayout.CENTER);
-//		}
-//		if(e.getSource() == back_flag_choose_btn)
-//		{
-//			flag_change_panel.setVisible(false);
-//			main_menu_panel.setVisible(true);
-//			add(main_menu_panel, BorderLayout.CENTER);
-//		}
 	}
-	private void add_elements(JPanel panel, JComponent[] cmps)//add components to panel
-	{
-		for(int i=0;i<cmps.length;i++)
-			panel.add(cmps[i]);
-	}
+
 	public JButton addVehicles()//call the vehicle adding panel
 	{
 		return add_vehicles_btn;
 	}
-	public void GetVehicles(ArrayList<T_Vehicle> vehicle_arr)//get the vehicles from the vehicle adding panel
+	public void updateVehicles(ArrayList<T_Vehicle> vehicle_arr)//get the vehicles from the vehicle adding panel
 	{
 		vehicles = vehicle_arr;
 	}
-	public void GetWater_Vehicles(ArrayList<Water_V> w_vehicle_arr)//get the water vehicles from the vehicle adding panel
+	public void updateWater_Vehicles(ArrayList<Water_V> w_vehicle_arr)//get the water vehicles from the vehicle adding panel
 	{
 		w_vehicles = w_vehicle_arr;
+	}
+	
+	public ArrayList<T_Vehicle> getVehicles()
+	{
+		return vehicles;
+	}
+	public ArrayList<Water_V> getWaterVehicles()
+	{
+		return w_vehicles;
 	}
 	public JButton quit()
 	{
@@ -334,11 +269,24 @@ public class Main_Menu extends JPanel implements ActionListener, Runnable{
 	
 	@Override
 	public void run() {
-		agency_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		agency_frame.setSize(820, 600);
-		agency_frame.setResizable(false);
-		agency_frame.setVisible(true);
-		agency_frame.add(this);
+		makeFrame(820, 600);
 
+//		while(alive == true)
+//		{
+//
+//		}
+	}
+	public JButton testDrive()
+	{
+		return test_drive_btn;
+	}
+	public T_Vehicle getPick()
+	{
+		return vehicles.get(pick);
+	}
+	public void exit()
+	{
+		frame.dispose();
+		alive = false;
 	}
 }
